@@ -4,5 +4,5 @@ IF_CHILD, 0
 EXEC t5_program1, 14
 IF_PARENT, 0
 EXEC t5_program2, 12
-END_IF
+ENDIF
 CPU, 50
