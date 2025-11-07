@@ -4,5 +4,5 @@ t2_program1, 10
 t2_program2, 15
 t3_program1, 10
 t4_program1, 40
-t5_program1, 10
-t5_program2, 15
+t5_program1, 45
+t5_program2, 35
