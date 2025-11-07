@@ -1,1 +1,8 @@
-NA
+CPU, 20
+FORK, 18
+IF_CHILD, 0
+EXEC t5_program1, 14
+IF_PARENT, 0
+EXEC t5_program2, 12
+END_IF
+CPU, 50
