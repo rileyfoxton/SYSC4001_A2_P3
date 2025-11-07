@@ -125,9 +125,9 @@ std::tuple<std::string, std::string, int> simulate_trace(std::vector<std::string
 
 
         } else if(activity == "EXEC") {
-            auto [intr, time] = intr_boilerplate(current_time, 3, 10, vectors);
-            current_time = time;
-            execution += intr;
+            //auto [intr, time] = intr_boilerplate(current_time, 3, 10, vectors);
+            //current_time = time;
+            //execution += intr;
 
             ///////////////////////////////////////////////////////////////////////////////////////////
             //Add your EXEC output here
@@ -138,35 +138,41 @@ std::tuple<std::string, std::string, int> simulate_trace(std::vector<std::string
                     size = file.size;
                 }
             }
-
-            execution += std::to_string(current_time) + ", " + std::to_string(duration_intr)+ ", Program is " + std::to_string(size) + "Mb large\n" ;
-            current_time += duration_intr;
-
-            execution+= std::to_string(current_time) + ", " + std::to_string(15*size)+ ", loading program into memory\n" ;
-            current_time += 15*size;
-
-            execution+= std::to_string(current_time) + ", 3, marking partition as occupied\n" ;
-            current_time += 3;
-
-            execution+= std::to_string(current_time) + ", 6, updating PCB\n" ;
-            current_time += 6;
-
-            execution+= std::to_string(current_time) + ", 0, scheduler called\n" ;
-
-            execution+= std::to_string(current_time) + ", 1, IRET\n" ;
-            current_time += 1;
-
             PCB almost_current(current.PID, current.PPID, program_name, size, -1);
             free_memory(&current);
             if(allocate_memory(&almost_current)){
+                auto [intr, time] = intr_boilerplate(current_time, 3, 10, vectors);
+                current_time = time;
+                execution += intr;
+
+                execution += std::to_string(current_time) + ", " + std::to_string(duration_intr)+ ", Program is " + std::to_string(size) + "Mb large\n" ;
+                current_time += duration_intr;
+
+                execution+= std::to_string(current_time) + ", " + std::to_string(15*size)+ ", loading program into memory\n" ;
+                current_time += 15*size;
+
+                execution+= std::to_string(current_time) + ", 3, marking partition as occupied\n" ;
+                current_time += 3;
+
+                execution+= std::to_string(current_time) + ", 6, updating PCB\n" ;
+                current_time += 6;
+
+                execution+= std::to_string(current_time) + ", 0, scheduler called\n" ;
+
+                execution+= std::to_string(current_time) + ", 1, IRET\n" ;
+                current_time += 1;
+                
                 current = almost_current;
                 system_status += "time: " + std::to_string(current_time) + "; current trace: EXEC "+program_name+", " + std::to_string(duration_intr)+ "\n" ;
                 system_status += print_PCB(current, wait_queue);
+                //std::cout<<"RAN";
             }
             else{
-                system_status += "EXEC FAIL";
+                execution+= std::to_string(current_time) + ", 0, EXEC FAIL\n" ;
+                system_status += "EXEC FAIL\n";
                 allocate_memory(&current);
             }
+            //std::cout << print_PCB(current, wait_queue);
 
              
 
@@ -196,6 +202,8 @@ std::tuple<std::string, std::string, int> simulate_trace(std::vector<std::string
             execution += temp_execution;
             system_status += temp_system_status;
             current_time = addTime;
+            
+            
 
             ///////////////////////////////////////////////////////////////////////////////////////////
 
